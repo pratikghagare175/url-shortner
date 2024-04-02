@@ -11,8 +11,8 @@ app.listen(PORT, () => {
   console.log(`Server Listening on Port ${PORT}`);
 });
 
+app.use(rootRouter);
+
 app.get("/healthz", (req, res) => {
   return res.send({ ok: true });
 });
-
-app.use("/service/short-link", rootRouter);

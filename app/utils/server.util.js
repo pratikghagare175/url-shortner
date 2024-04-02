@@ -1,6 +1,13 @@
 const { customAlphabet } = require("nanoid");
+const config = require("../configs/env.config")
 
-export const hashGeneration = () => {
-  const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  return customAlphabet(alphabet, 8); // 8 is the ID length
+exports.generateLink = () => {
+  const hashAlphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const customAlphabetHash = customAlphabet(hashAlphabets, 6); // 6 is the ID length
+  const hash = customAlphabetHash()
+  return {shortlink:`${config.shortlink_domain}/${hash}`,hash}
+};
+
+exports.responseSend = (res, statusCode, {success, message, data}) => {
+  res.status(statusCode).send({success, message, data});
 };

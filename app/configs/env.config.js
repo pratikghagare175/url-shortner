@@ -15,7 +15,7 @@ const config = convict({
   mongo: {
     uri: {
       doc: "Mongodb Connection URI",
-      default: "mongodb://localhost:27017",
+      default: "mongodb://localhost:27017/shortlinkdb",
       env: "MONGODB_URI",
     },
   },
@@ -26,6 +26,11 @@ const config = convict({
       env: "REDIS_URI",
     },
   },
+  shortlink_domain:{
+      doc: "short link domain value",
+      default: "http://localhost:8080",
+      env: "SHORTLINK_DOMAIN",
+  }
 });
 
 config.validate({ allowed: "strict" });

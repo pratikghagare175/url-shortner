@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const MongoDbService = require("../services/mongodb.service");
 
 const shorlinkSchema = new mongoose.Schema(
   {
@@ -12,7 +13,6 @@ const shorlinkSchema = new mongoose.Schema(
       },
       original: {
         type: String,
-        unique: true,
       },
       hash: {
         type: String,
@@ -21,6 +21,11 @@ const shorlinkSchema = new mongoose.Schema(
     },
     is_active: {
       type: Boolean,
+      default: true
+    },
+    click_count:{
+      type:Number,
+      default: 0
     },
     expire_at: {
       type: Number,
@@ -29,10 +34,14 @@ const shorlinkSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+shorlinkSchema.index({"url.hash":1,is_active:1})
+shorlinkSchema.index({"url.original":1, is_active:1})
+
 shorlinkSchema.pre("save", function (next) {
-  this.url_id = this.url_id;
+  this.url_id = this._id;
   next();
 });
 
-const shortlinkModel = mongoose.model(shorlinkSchema, "short_link");
-module.exports = shortlinkModel;
+const shortlinkModel = mongoose.model("short_link",shorlinkSchema);
+const shortlinkService = new MongoDbService(shortlinkModel)
+module.exports = shortlinkService;
